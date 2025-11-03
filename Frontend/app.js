@@ -10,6 +10,10 @@ function limparMensagem() { mostrarMensagem(''); mostrarMensagem('', 'lblMensage
 function lerCamposDoFormulario() {
   return {
     nome: document.getElementById('txtNome').value.trim(),
+    // INCLUSÃO: CAPTURANDO NOME E RM DO CADASTRANTE
+    nomeCadastrante: document.getElementById('txtNomeCadastrante').value.trim(),
+    rmCadastrante: document.getElementById('txtRmCadastrante').value.trim(),
+    // FIM INCLUSÃO
     preco: Number(document.getElementById('txtPreco').value),
     categoria: document.getElementById('cboCategoria').value,
     estoque: Number(document.getElementById('txtEstoque').value),
@@ -29,6 +33,7 @@ function preencherTabela(produtos) {
       <td>${p.categoria}</td>
       <td>${p.estoque}</td>
       <td>${p.ativo ? 'Sim' : 'Não'}</td>
+      <td>${p.cadastradoPorNome || 'N/A'} (RM: ${p.cadastradoPorRM || 'N/A'})</td> 
       <td>
         <span class="acao">
           <button onclick="aoEditar(${p.id})">Editar</button>
@@ -39,6 +44,8 @@ function preencherTabela(produtos) {
     corpo.appendChild(tr);
   });
 }
+
+// ... restante do código ...
 
 async function carregarProdutos() {
   const resp = await fetch(BASE_URL);
@@ -54,19 +61,28 @@ async function aoCarregar() {
 }
 function aoLimpar() {
   document.getElementById('txtNome').value = '';
+  // INCLUSÃO: Limpar novos campos
+  document.getElementById('txtNomeCadastrante').value = '';
+  document.getElementById('txtRmCadastrante').value = '';
+  // FIM INCLUSÃO
   document.getElementById('txtPreco').value = '';
   document.getElementById('cboCategoria').value = '';
   document.getElementById('txtEstoque').value = '';
   document.getElementById('chkAtivo').checked = true;
   limparMensagem();
 }
+
 async function aoCadastrar() {
   try {
     limparMensagem();
     const dados = lerCamposDoFormulario();
-    if (!dados.nome || !dados.categoria || isNaN(dados.preco) || isNaN(dados.estoque)) {
-      mostrarMensagem('Preencha os campos corretamente.'); return;
+    
+    // CORREÇÃO/INCLUSÃO: Validação dos novos campos
+    if (!dados.nome || !dados.categoria || isNaN(dados.preco) || isNaN(dados.estoque) || !dados.nomeCadastrante || !dados.rmCadastrante) {
+      mostrarMensagem('Preencha os campos corretamente, incluindo Nome e RM do Cadastrante.'); return;
     }
+    // FIM CORREÇÃO/INCLUSÃO
+    
     const resp = await fetch(BASE_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(dados) });
     const json = await resp.json();
     if (!resp.ok) { mostrarMensagem(json?.erros ? json.erros.join(' | ') : 'Erro ao cadastrar.'); return; }

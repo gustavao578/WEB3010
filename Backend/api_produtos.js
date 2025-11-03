@@ -9,11 +9,12 @@ app.use(express.json());
 // "Banco" em memória
 let proximoId = 6;
 let produtos = [
-  { id: 1, nome: 'Teclado', preco: 120.90, categoria: 'Periféricos', estoque: 15, ativo: true },
-  { id: 2, nome: 'Mouse', preco: 79.50, categoria: 'Periféricos', estoque: 40, ativo: true },
-  { id: 3, nome: 'Monitor 24"', preco: 899.00, categoria: 'Monitores', estoque: 10, ativo: true },
-  { id: 4, nome: 'Cabo HDMI', preco: 35.00, categoria: 'Acessórios', estoque: 100, ativo: true },
-  { id: 5, nome: 'Notebook', preco: 4299.90, categoria: 'Computadores', estoque: 5, ativo: false }
+  // INCLUSÃO: CAMPOS DE CADASTRO NOS OBJETOS INICIAIS
+  { id: 1, nome: 'Teclado', preco: 120.90, categoria: 'Periféricos', estoque: 15, ativo: true, cadastradoPorNome: 'Admin', cadastradoPorRM: '1000' },
+  { id: 2, nome: 'Mouse', preco: 79.50, categoria: 'Periféricos', estoque: 40, ativo: true, cadastradoPorNome: 'Admin', cadastradoPorRM: '1000' },
+  { id: 3, nome: 'Monitor 24"', preco: 899.00, categoria: 'Monitores', estoque: 10, ativo: true, cadastradoPorNome: 'Admin', cadastradoPorRM: '1000' },
+  { id: 4, nome: 'Cabo HDMI', preco: 35.00, categoria: 'Acessórios', estoque: 100, ativo: true, cadastradoPorNome: 'Admin', cadastradoPorRM: '1000' },
+  { id: 5, nome: 'Notebook', preco: 4299.90, categoria: 'Computadores', estoque: 5, ativo: false, cadastradoPorNome: 'Admin', cadastradoPorRM: '1000' }
 ];
 
 
@@ -22,12 +23,19 @@ function obterProdutoPorId(id) { return produtos.find(p => p.id === id) || null;
 
 function validarProduto(dados) {
   const erros = [];
+  // ... validações existentes ...
   if (!dados || typeof dados !== 'object') erros.push('Corpo da requisição inválido.');
   if (!dados.nome || String(dados.nome).trim().length < 2) erros.push('Nome é obrigatório e deve ter pelo menos 2 caracteres.');
   if (dados.preco == null || isNaN(Number(dados.preco)) || Number(dados.preco) < 0) erros.push('Preço é obrigatório e deve ser um número >= 0.');
   if (!dados.categoria || String(dados.categoria).trim().length < 2) erros.push('Categoria é obrigatória.');
   if (dados.estoque == null || isNaN(Number(dados.estoque)) || Number(dados.estoque) < 0) erros.push('Estoque é obrigatório e deve ser um inteiro >= 0.');
   if (typeof dados.ativo !== 'boolean') erros.push('Ativo deve ser booleano (true/false).');
+
+  // INCLUSÃO: Validação dos campos de cadastro
+  if (!dados.nomeCadastrante || String(dados.nomeCadastrante).trim().length < 2) erros.push('Nome do cadastrante é obrigatório.');
+  if (!dados.rmCadastrante || String(dados.rmCadastrante).trim().length < 4 || !/^\d+$/.test(dados.rmCadastrante)) erros.push('RM do cadastrante é obrigatório e deve ser um número com pelo menos 4 dígitos.');
+  // FIM INCLUSÃO
+  
   return erros;
 }
 
@@ -38,11 +46,17 @@ function cadastrarProduto(dados) {
     preco: Number(dados.preco),
     categoria: String(dados.categoria).trim(),
     estoque: Number(dados.estoque),
-    ativo: Boolean(dados.ativo)
+    ativo: Boolean(dados.ativo),
+    // INCLUSÃO: Campos de cadastro
+    cadastradoPorNome: String(dados.nomeCadastrante).trim(),
+    cadastradoPorRM: String(dados.rmCadastrante).trim()
+    // FIM INCLUSÃO
   };
   produtos.push(novo);
   return novo;
 }
+
+// ... restante do código (funções de atualização, exclusão e rotas REST) ...
 
 function atualizarProduto(id, dados) {
   const idx = produtos.findIndex(p => p.id === id);

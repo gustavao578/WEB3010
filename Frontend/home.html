@@ -11,8 +11,17 @@
 
     <section class="card">
       <div class="linha">
-        <label id="lblNome" for="txtNome">Nome</label>
+        <label id="lblNome" for="txtNome">Nome do Produto</label>
         <input id="txtNome" type="text" placeholder="Ex.: Teclado" />
+      </div>
+
+      <div class="linha">
+        <label for="txtNomeCadastrante">Cadastrado por (Nome)</label>
+        <input id="txtNomeCadastrante" type="text" placeholder="Nome do Aluno/Cadastrante" />
+      </div>
+      <div class="linha">
+        <label for="txtRmCadastrante">RM do Cadastrante</label>
+        <input id="txtRmCadastrante" type="text" placeholder="RM do Aluno" />
       </div>
       <div class="linha">
         <label id="lblPreco" for="txtPreco">Preço (R$)</label>
@@ -51,7 +60,13 @@
       <table id="tblProdutos">
         <thead>
           <tr>
-            <th>#</th><th>Nome</th><th>Preço</th><th>Categoria</th><th>Estoque</th><th>Ativo</th><th>Ações</th>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Categoria</th>
+            <th>Estoque</th>
+            <th>Ativo</th>
+            <th>Cadastrado por</th> <th>Ações</th>
           </tr>
         </thead>
         <tbody id="corpoTabela"></tbody>
@@ -59,41 +74,8 @@
     </section>
 
     <section class="card" id="secaoEdicao" style="display:none;">
-      <h2>Editar Produto</h2>
-      <input type="hidden" id="hidIdEdicao" />
-      <div class="linha">
-        <label for="txtNomeEdicao">Nome</label>
-        <input id="txtNomeEdicao" type="text" />
-      </div>
-      <div class="linha">
-        <label for="txtPrecoEdicao">Preço (R$)</label>
-        <input id="txtPrecoEdicao" type="number" step="0.01" min="0" />
-      </div>
-      <div class="linha">
-        <label for="cboCategoriaEdicao">Categoria</label>
-        <select id="cboCategoriaEdicao">
-          <option value="Periféricos">Periféricos</option>
-          <option value="Monitores">Monitores</option>
-          <option value="Acessórios">Acessórios</option>
-          <option value="Computadores">Computadores</option>
-        </select>
-      </div>
-      <div class="linha">
-        <label for="txtEstoqueEdicao">Estoque</label>
-        <input id="txtEstoqueEdicao" type="number" min="0" step="1" />
-      </div>
-      <div class="linha linha-check">
-        <input id="chkAtivoEdicao" type="checkbox" />
-        <label for="chkAtivoEdicao">Ativo</label>
-      </div>
-      <div class="botoes">
-        <button onclick="aoSalvarEdicao()">Salvar</button>
-        <button onclick="aoCancelarEdicao()">Cancelar</button>
-      </div>
-      <p id="lblMensagemEdicao" class="mensagem"></p>
-    </section>
+      </section>
   </main>
   <script src="app.js"></script>
 </body>	
-</html>		
-																															
+</html>

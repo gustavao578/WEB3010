@@ -94,17 +94,18 @@
       salvarCadastro(){
         const nome  = (document.getElementById('nome')?.value || '').trim();
         const email = (document.getElementById('email')?.value || '').trim();
+        const rm    = (document.getElementById('rm')?.value || '').trim();
         const senha = document.getElementById('senha')?.value || '';
 
-        if(!nome || !email || !senha){ IU.mensagem('mensagem','Preencha todos os campos.'); return; }
+        if(!nome || !rm || !email || !senha){ IU.mensagem('mensagem','Preencha todos os campos.'); return; }
         if(senha.length < 6){ IU.mensagem('mensagem','A senha deve ter pelo menos 6 caracteres.'); return; }
         if(UsuariosRepositorio.existeEmail(email)){ IU.mensagem('mensagem','E-mail já cadastrado.'); return; }
 
-        UsuariosRepositorio.adicionar({ id: Date.now(), nome, email, senha });
+        UsuariosRepositorio.adicionar({ id: Date.now(), nome, rm, email, senha });
         IU.mensagem('mensagem','Cadastro realizado com sucesso!','sucesso');
 
         // limpar campos
-        ['nome','email','senha'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+        ['nome','rm','email','senha'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
         setTimeout(()=> IU.navegar('login.html'), 900);
       },
       voltarParaLogin(){ IU.navegar('login.html'); }
